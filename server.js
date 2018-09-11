@@ -8,6 +8,7 @@ const csrf = require('csurf');
 const jwtDecode = require('jwt-decode');
 const cookieParser = require('cookie-parser');
 const jwt = require('jsonwebtoken');
+const expressJwt = require('express-jwt');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 
@@ -41,7 +42,7 @@ app.use(
 app.use(cookieParser());
 
 const attachUser = (req, res, next) => {
-  const token = req.cookies.token;
+  const token = req.headers.authorization;
   if (!token) {
     return res.status(401).json({ message: 'Authentication invalid' });
   }
@@ -69,24 +70,24 @@ const checkSession = (req, res, next) => {
   }
 };
 
-// const checkJwt = expressJwt({ secret: process.env.JWT_SECRET });
+const checkJwt = expressJwt({ secret: process.env.JWT_SECRET });
 
-const checkJwt = (req, res, next) => {
-  const token = req.cookies.token;
-  if (!token) {
-    return res.status(403).json({ message: 'Access denied' });
-  }
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET, {
-      audience: 'api.vacay.com',
-      issuer: 'api.vacay.com'
-    });
-    console.log(decoded);
-    next();
-  } catch (err) {
-    return res.status(403).json({ message: 'Access denied' });
-  }
-};
+// const checkJwt = (req, res, next) => {
+//   const token = req.cookies.token;
+//   if (!token) {
+//     return res.status(403).json({ message: 'Access denied' });
+//   }
+//   try {
+//     const decoded = jwt.verify(token, process.env.JWT_SECRET, {
+//       audience: 'api.vacay.com',
+//       issuer: 'api.vacay.com'
+//     });
+//     console.log(decoded);
+//     next();
+//   } catch (err) {
+//     return res.status(403).json({ message: 'Access denied' });
+//   }
+// };
 
 const makeCsrfToken = (req, res, next) => {
   res.cookie('csrf-token', req.csrfToken());
