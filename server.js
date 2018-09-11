@@ -118,7 +118,7 @@ async function connect() {
   } catch (err) {
     console.log('Mongoose error', err);
   }
-  app.listen(3000);
+  app.listen(process.env.PORT || 3000);
   console.log('API listening on localhost:3000');
 }
 
