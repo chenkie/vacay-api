@@ -1,16 +1,16 @@
 const Destination = require('./../model');
 
-const getDestinations = async owner => {
+const getDestinations = async () => {
   try {
-    return await Destination.find({ owner });
+    return await Destination.find({});
   } catch (err) {
     return err;
   }
 };
 
-const getDestination = async (owner, id) => {
+const getDestination = async id => {
   try {
-    return await Destination.findOne({ owner, _id: id });
+    return await Destination.findOne({ _id: id });
   } catch (err) {
     return err;
   }
@@ -27,9 +27,9 @@ const createDestination = async (owner, destinationData) => {
   }
 };
 
-const deleteDestination = async (owner, id) => {
+const deleteDestination = async id => {
   try {
-    return await Destination.findOneAndRemove({ owner, _id: id });
+    return await Destination.findOneAndRemove({ _id: id });
   } catch (err) {
     console.log(err);
     return err;
